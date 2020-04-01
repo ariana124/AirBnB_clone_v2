@@ -31,7 +31,7 @@ class FileStorage:
             for key, value in self.__objects.items():
                 if cls.__name__ == value.__class__.__name__:
                     new_dict[key] = value
-                return new_dict
+            return new_dict
 
     def new(self, obj):
         """sets __object to given obj
