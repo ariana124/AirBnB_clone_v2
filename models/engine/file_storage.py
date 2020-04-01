@@ -29,7 +29,7 @@ class FileStorage:
         else:
             new_dict = {}
             for key, value in self.__objects.items():
-                if isinstance(value, cls):
+                if cls.__name__ == value.__class__.__name__:
                     new_dict[key] = value
                 return new_dict
 
