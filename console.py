@@ -38,6 +38,26 @@ class HBNBCommand(cmd.Cmd):
             SyntaxError: when there is no args given
             NameError: when there is no object taht has the name
         """
+        if len(args) == 0:
+            print("** class name missing **")
+            return
+        try:
+            args = self.splitter(args)
+            new_instance = eval(args[0])()
+            for x in args[1:]:
+                n_ag = x.split("=")
+                if hasattr(new_instance, n_ag[0]):
+                    try:
+                        n_ag[1] = eval(n_ag[1])
+                    except(IndexError, ValueError):
+                        pass
+                    if type(n_ag[1]) is str:
+                        n_ag[1] = n_ag[1].replace("_", " ")
+                    setattr(new_instance, n_ag[0], n_ag[1])
+            new_instance.save()
+            print(new_instance.id)
+        except NameError:
+            print("** class doesn't exist **")
         try:
             if not line:
                 raise SyntaxError()
