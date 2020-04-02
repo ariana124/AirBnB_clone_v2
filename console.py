@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """This is the console for AirBnB"""
 import cmd
+import shlex
 from models import storage
 from datetime import datetime
 from models.base_model import BaseModel
@@ -10,15 +11,12 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from shlex import split
 
 
 class HBNBCommand(cmd.Cmd):
     """this class is entry point of the command interpreter
     """
     prompt = "(hbnb) "
-    all_classes = {"BaseModel", "User", "State", "City",
-                   "Amenity", "Place", "Review"}
 
     def emptyline(self):
         """Ignores empty spaces"""
@@ -33,43 +31,29 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def do_create(self, line):
-        """Creates a new instance of BaseModel, saves it
-        Exceptions:
-            SyntaxError: when there is no args given
-            NameError: when there is no object taht has the name
-        """
-        if len(args) == 0:
+        """Creates a new instance of BaseModel, saves it"""
+        if len(line) == 0:
             print("** class name missing **")
             return
         try:
-            args = self.splitter(args)
+            args = shlex.split(line)
             new_instance = eval(args[0])()
-            for x in args[1:]:
-                n_ag = x.split("=")
-                if hasattr(new_instance, n_ag[0]):
-                    try:
-                        n_ag[1] = eval(n_ag[1])
-                    except(IndexError, ValueError):
-                        pass
-                    if type(n_ag[1]) is str:
-                        n_ag[1] = n_ag[1].replace("_", " ")
-                    setattr(new_instance, n_ag[0], n_ag[1])
+            if len(args) > 1:
+                my_dict = dict(arg.split('=') for arg in args[1:])
+                for key, value in my_dict.items():
+                    if hasattr(new_instance, key):
+                        if '_' in value:
+                            value = value.replace('_', ' ')
+                            try:
+                                value = eval(value)
+                            except Exception:
+                                pass
+                        setattr(new_instance, key, value)
             new_instance.save()
             print(new_instance.id)
-        except NameError:
-            print("** class doesn't exist **")
-        try:
-            if not line:
-                raise SyntaxError()
-            my_list = line.split(" ")
-            obj = eval("{}()".format(my_list[0]))
-            obj.save()
-            print("{}".format(obj.id))
-        except SyntaxError:
-            print("** class name missing **")
-        except NameError:
-            print("** class doesn't exist **")
 
+        except Exception:
+            print("** class doesn't exist **")
     def do_show(self, line):
         """Prints the string representation of an instance
         Exceptions:
@@ -138,24 +122,23 @@ class HBNBCommand(cmd.Cmd):
         Exceptions:
             NameError: when there is no object taht has the name
         """
+        obj_list = []
+        storage.reload()
         objects = storage.all()
-        my_list = []
-        if not line:
-            for key in objects:
-                my_list.append(objects[key])
-            print(my_list)
-            return
         try:
-            args = line.split(" ")
-            if args[0] not in self.all_classes:
-                raise NameError()
-            for key in objects:
-                name = key.split('.')
-                if name[0] == args[0]:
-                    my_list.append(objects[key])
-            print(my_list)
+            if len(args) != 0:
+                eval(args)
         except NameError:
             print("** class doesn't exist **")
+            return
+        for key, val in objects.items():
+            if len(args) != 0:
+                if type(val) is eval(args):
+                    obj_list.append(val)
+            else:
+                obj_list.append(val)
+
+        print(obj_list)
 
     def do_update(self, line):
         """Updates an instanceby adding or updating attribute
