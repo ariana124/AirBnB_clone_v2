@@ -13,8 +13,8 @@ from models.amenity import Amenity
 from models.review import Review
 
 classes = {"State": State,
-           "City": City}
-# "User": User
+           "City": City,
+           "User": User}
 # "Place": Place,
 # "Review": Review,
 # "Amenity": Amenity}
