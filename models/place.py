@@ -1,7 +1,19 @@
 #!/usr/bin/python3
 """This is the place class"""
+import os
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
+from sqlalchemy.orm import relationship
+
+
+metadata = Base.metadata
+place_amenity = Table('place_amenity', metadata,
+                      Column('place_id', String(60),
+                             ForeignKey('places.id'),
+                             primary_key=True, nullable=False),
+                      Column('amenity_id', String(60),
+                             ForeignKey('amenities.id'),
+                             primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -31,3 +43,27 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
+
+    if os.environ.get("HBNB_TYPE_STORAGE") == "db":
+        reviews = relationship("Review", backref="place", cascade="all, delete")
+        amenities = relationship("Amenity", secondary=place_amenity,
+                                 viewonly=False, backref="place_amenities")
+
+    else:
+        @property
+        def reviews(self):
+            """ returns a list of associated reviews """
+            review_list = []
+            for review in models.storage.all(Review).items():
+                if self.id == review.place_id:
+                    review_list.append(review)
+            return review_list
+
+        @property
+        def amenities(self):
+            """ returns a list of associated amenities """
+            a_list = []
+            for amenity in models.storage.all(Amenity).items():
+                if self.id == amenity.place_id:
+                    a_list.append(amenity)
+            return a_list
