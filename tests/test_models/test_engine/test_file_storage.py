@@ -91,6 +91,12 @@ class TestFileStorage(unittest.TestCase):
                 self.assertEqual(line, "{}")
         self.assertIs(self.storage.reload(), None)
 
+    def test_all_return_type(self):
+        '''tests the data type of the return'''
+        storage_all = self.storage.all()
+        self.assertIsInstance(storage_all, dict)
+
+
 
 if __name__ == "__main__":
     unittest.main()
