@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """This is the place class"""
+import os
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
 
@@ -31,3 +32,16 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
+
+    if os.environ.get("HBNB_TYPE_STORAGE") == "db":
+        reviews = relationship("Review", backref="place", cascade="all, delete")
+
+    else:
+        @property
+        def reviews(self):
+            """ returns a list of associated cities """
+            review_list = []
+            for review in models.storage.all(Review).items():
+                if self.id == review.place_id:
+                    review_list.append(review)
+            return review_list
