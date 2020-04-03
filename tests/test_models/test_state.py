@@ -62,6 +62,11 @@ class TestState(unittest.TestCase):
         """test if dictionary works"""
         self.assertEqual('to_dict' in dir(self.state), True)
 
+    def test_stateInheritance(self):
+        '''test that state inherits from BaseModel'''
+        new_state = State()
+        self.assertIsInstance(new_state, BaseModel)
+
 
 if __name__ == "__main__":
     unittest.main()
