@@ -67,6 +67,17 @@ class TestState(unittest.TestCase):
         new_state = State()
         self.assertIsInstance(new_state, BaseModel)
 
+    def test_stateAttributes(self):
+        '''test that State class contains the attribute name'''
+        new_state = State()
+        self.assertTrue("name" in new_state.__dir__())
+
+    def test_stateAttributes_type(self):
+        '''test that State class attribute name is class type str'''
+        new_state = State()
+        name = getattr(new_state, "name")
+        self.assertIsInstance(name, str)
+
 
 if __name__ == "__main__":
     unittest.main()
