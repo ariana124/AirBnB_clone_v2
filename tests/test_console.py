@@ -232,5 +232,39 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(
                 "** value missing **\n", f.getvalue())
 
+    def test_create_of_fileStorage(self):
+        '''test create'''
+        console = self.create()
+        console.onecmd("create User")
+        self.assertTrue(isinstance(self.capt_out.getvalue(), str))
+
+    def test_class_name(self):
+        '''test class name missing'''
+        console = self.create()
+        console.onecmd("create")
+        x = (self.capt_out.getvalue())
+        self.assertEqual("** class name missing **\n", x)
+
+    def test_errorMessage_className_missing(self):
+        '''test error message'''
+        console = self.create()
+        console.onecmd("create Binita")
+        x = (self.capt_out.getvalue())
+        self.assertEqual("** class doesn't exist **\n", x)
+
+    def test_show_id_missing(self):
+        '''test error message'''
+        console = self.create()
+        console.onecmd("create User")
+        user_id = self.capt_out.getvalue()
+        sys.stdout = self.backup
+        self.capt_out.close()
+        self.capt_out = StringIO()
+        sys.stdout = self.capt_out
+        console.onecmd("show User")
+        x = (self.capt_out.getvalue())
+        sys.stdout = self.backup
+        self.assertEqual("** instance id missing **\n", x)
+
 if __name__ == "__main__":
     unittest.main()
