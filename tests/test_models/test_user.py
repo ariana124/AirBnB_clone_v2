@@ -71,6 +71,29 @@ class TestUser(unittest.TestCase):
         """test if dictionary works"""
         self.assertEqual('to_dict' in dir(self.user), True)
 
+    def test_email(self):
+        '''test the type of name'''
+        new = User()
+        name = getattr(new, "email")
+        self.assertIsInstance(name, str)
+
+    def test_first_name(self):
+        '''test the type of name'''
+        new = User()
+        name = getattr(new, "first_name")
+        self.assertIsInstance(name, str)
+
+    def test_last_name(self):
+        '''test the type of last_name'''
+        new = User()
+        name = getattr(new, "last_name")
+        self.assertIsInstance(name, str)
+
+    def test_password(self):
+        '''test the type of password'''
+        new = User()
+        name = getattr(new, "password")
+        self.assertIsInstance(name, str)
 
 if __name__ == "__main__":
     unittest.main()
