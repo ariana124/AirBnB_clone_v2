@@ -3,6 +3,7 @@
 import os
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy.orm import relationship
 
 
 class Place(BaseModel, Base):
@@ -39,7 +40,7 @@ class Place(BaseModel, Base):
     else:
         @property
         def reviews(self):
-            """ returns a list of associated cities """
+            """ returns a list of associated reviews """
             review_list = []
             for review in models.storage.all(Review).items():
                 if self.id == review.place_id:
