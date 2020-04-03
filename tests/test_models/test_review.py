@@ -68,6 +68,11 @@ class TestReview(unittest.TestCase):
         """test if dictionary works"""
         self.assertEqual('to_dict' in dir(self.rev), True)
 
+    def test_reviewInheritance(self):
+        '''reviews that class inherits from BaseModel'''
+        new_review = Review()
+        self.assertIsInstance(new_review, BaseModel)
+
 
 if __name__ == "__main__":
     unittest.main()
