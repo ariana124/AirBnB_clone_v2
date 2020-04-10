@@ -23,7 +23,7 @@ def do_pack():
     if result.failed:
         return None
     else:
-        return result
+        return archive_file
 
 
 def do_deploy(archive_path):
