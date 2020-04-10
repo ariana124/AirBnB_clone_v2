@@ -16,9 +16,9 @@ def do_pack():
     """ generates a .tgz archive from the contents of web_static """
 
     time = datetime.now().strftime("%Y%m%d%H%M%S")
-    archive = "versions/web_static_{}.tgz".format(time)
+    archive_file = "versions/web_static_{}.tgz".format(time)
     local("mkdir -p versions")
-    result = local("tar -cvzf {} web_static".format(archive))
+    result = local("tar -cvzf {} web_static".format(archive_file))
 
     if result.failed:
         return None
