@@ -21,8 +21,7 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """
-            returns a dictionary of __object
+        """returns a dictionary of __object
         """
         if cls is None:
             return self.__objects
@@ -69,3 +68,7 @@ class FileStorage:
             del self.__objects["{}.{}".format(type(obj).__name__, obj.id)]
         except:
             pass
+
+    def close(self):
+        """ method for deserializing the JSON file to objects """
+        self.reload()
