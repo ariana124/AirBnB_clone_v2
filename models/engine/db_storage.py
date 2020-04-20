@@ -31,7 +31,7 @@ class DBStorage:
     __session = None
 
     def __init__(self):
-        """Instance attribute for DBStorage"""
+        """ Instance attribute for DBStorage """
         self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}".format(
             getenv("HBNB_MYSQL_USER"),
             getenv("HBNB_MYSQL_PWD"),
@@ -41,7 +41,7 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """query on the current database session"""
+        """ query on the current database session """
         obj = {}
         clss = [value for key, value in classes.items()]
         if cls:
@@ -55,25 +55,25 @@ class DBStorage:
         return obj
 
     def new(self, obj):
-        """adds objects to current database session"""
+        """ adds objects to current database session """
         self.__session.add(obj)
 
     def save(self):
-        """commits all changes of the current database session"""
+        """ commits all changes of the current database session """
         self.__session.commit()
 
     def delete(self, obj=None):
-        """deletes obj from the current database session if not None"""
+        """ deletes obj from the current database session if not None """
         if obj is not None:
             self.__session.delete(obj)
 
     def reload(self):
-        """creates the current database session from the engine"""
+        """ creates the current database session from the engine """
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(Session)
 
     def close(self):
-        """removes the private session attribute"""
+        """ removes the private session attribute """
         if self.__session:
             self.__session.remove()
