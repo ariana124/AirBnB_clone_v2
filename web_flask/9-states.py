@@ -23,7 +23,7 @@ def states(id=None):
     states = storage.all("State")
     if id is not None:
         state = "State.{}".format(id)
-        state = states.get(state) # returns the state name (key value)
+        state = states.get(state)  # returns the state name (key value)
         return render_template("9-states.html", state=state)
     else:
         return render_template("9-states.html", states=states)
